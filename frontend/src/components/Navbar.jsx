@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Bell, User } from 'lucide-react';
+import { Search, Bell, User, LogIn, LogOut } from 'lucide-react';
 
-const Navbar = () => {
+const Navbar = ({ user, onLoginClick, onLogout }) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -33,9 +33,29 @@ const Navbar = () => {
         <div className="flex items-center space-x-6 text-white">
           <Search className="w-5 h-5 cursor-pointer hover:text-gray-300" />
           <Bell className="w-5 h-5 cursor-pointer hover:text-gray-300" />
-          <div className="w-8 h-8 bg-blue-600 rounded cursor-pointer flex items-center justify-center">
-             <User className="w-5 h-5" />
-          </div>
+          
+          {user ? (
+             <div className="flex items-center space-x-4">
+                <span className="text-sm font-bold hidden sm:block">Hi, {user.name}</span>
+                <div 
+                    onClick={onLogout}
+                    className="flex items-center space-x-1 cursor-pointer hover:text-red-500 transition"
+                    title="Logout"
+                >
+                    <LogOut className="w-5 h-5" />
+                </div>
+                <div className="w-8 h-8 bg-blue-600 rounded cursor-pointer flex items-center justify-center">
+                    <User className="w-5 h-5" />
+                </div>
+             </div>
+          ) : (
+             <button 
+                onClick={onLoginClick}
+                className="flex items-center bg-red-600 px-4 py-1 rounded text-sm font-bold hover:bg-red-700 transition"
+             >
+                <LogIn className="w-4 h-4 mr-2" /> Login
+             </button>
+          )}
         </div>
       </div>
     </nav>

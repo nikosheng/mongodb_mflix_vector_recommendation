@@ -70,3 +70,7 @@ The frontend will run on `http://localhost:5173`.
 - **Banner**: Featured movie.
 - **Movie Details**: Click on any movie to see details.
 - **Recommendations**: The "More Like This" section in the modal uses **Vector Search** to find movies with similar plots.
+
+## Demo Login
+
+For demonstration purposes, you can log in with the username `Cersei Lannister` and `Bran Stark` to see personalized recommendations based on browsing history.

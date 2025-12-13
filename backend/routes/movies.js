@@ -55,14 +55,25 @@ router.get('/recommend/:id', async (req, res) => {
         }
       },
       {
-        $project: {
-          title: 1,
-          poster: 1,
-          plot: 1,
-          genres: 1,
-          year: 1,
-          imdb: 1,
-          score: { $meta: "vectorSearchScore" }
+        $addFields: {
+            score: { "$meta": "vectorSearchScore" } // Capture the similarity score
+        }
+      },
+      {
+        $sort: {
+            released: -1 // Sort by release date (newest first)
+        }
+      },
+      {
+        "$project": {
+          "title": 1,
+          "poster": 1,
+          "plot": 1,
+          "genres": 1,
+          "year": 1,
+          "imdb": 1,
+          "released": 1,
+          "score": 1
         }
       }
     ];
