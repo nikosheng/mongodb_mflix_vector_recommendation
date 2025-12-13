@@ -1,0 +1,103 @@
+{
+  "plot": "An ambitious and near insanely violent gangster climbs the ladder of success in the mob, but his weaknesses prove to be his downfall.",
+  "genres": [
+    "Action",
+    "Crime",
+    "Drama"
+  ],
+  "runtime": 93,
+  "rated": "PASSED",
+  "cast": [
+    "Paul Muni",
+    "Ann Dvorak",
+    "Karen Morley",
+    "Osgood Perkins"
+  ],
+  "num_mflix_comments": 1,
+  "poster": "https://m.media-amazon.com/images/M/MV5BYmMxZTU2ZDUtM2Y1MS00ZWFmLWJlN2UtNzI0OTJiOTYzMTk3XkEyXkFqcGdeQXVyMjUxODE0MDY@._V1_SY1000_SX677_AL_.jpg",
+  "title": "Scarface",
+  "fullplot": "Johnny Lovo rises to the head of the bootlegging crime syndicate on the south side of Chicago following the murder of former head, Big Louis Costillo. Johnny contracted Big Louis' bodyguard, Tony Camonte, to make the hit on his boss. Tony becomes Johnny's second in command. Johnny is not averse to killing anyone who gets in his and Johnny's way. As Tony is thinking bigger than Johnny and is not afraid of anyone or anything, Tony increasingly makes decisions on his own instead of following Johnny's orders, especially in not treading on the north side run by an Irish gang led by a man named O'Hara, of whom Johnny is afraid. Tony's murder spree increases, he taking out anyone who stands in his and Johnny's way of absolute control on the south side, and in Tony's view absolute control of the entire city. Tony's actions place an unspoken strain between Tony and Johnny to the point of the two knowing that they can't exist in their idealized world with the other. Tony's ultimate downfall may be one of two women in his life: Poppy, Johnny's girlfriend to who Tony is attracted; and Tony's eighteen year old sister, Cesca, who is self-professed to be older mentally than her years much to Tony's chagrin, he who will do anything to protect her innocence. Cesca ultimately comes to the realization that she is a lot more similar to her brother than she first imagined.",
+  "languages": [
+    "English"
+  ],
+  "released": {
+    "$date": {
+      "$numberLong": "-1190678400000"
+    }
+  },
+  "directors": [
+    "Howard Hawks",
+    "Richard Rosson"
+  ],
+  "writers": [
+    "Armitage Trail (novel)",
+    "Ben Hecht (screen story)",
+    "Seton I. Miller (continuity)",
+    "John Lee Mahin (continuity)",
+    "W.R. Burnett (continuity)",
+    "Seton I. Miller (dialogue)",
+    "John Lee Mahin (dialogue)",
+    "W.R. Burnett (dialogue)"
+  ],
+  "awards": {
+    "wins": 2,
+    "nominations": 0,
+    "text": "2 wins."
+  },
+  "lastupdated": "2015-09-03 00:32:16.227000000",
+  "year": 1932,
+  "imdb": {
+    "rating": 7.8,
+    "votes": 18334,
+    "id": 23427
+  },
+  "countries": [
+    "USA"
+  ],
+  "type": "movie",
+  "tomatoes": {
+    "viewer": {
+      "rating": 3.9,
+      "numReviews": 25579,
+      "meter": 86
+    },
+    "dvd": {
+      "$date": "2007-05-22T00:00:00.000Z"
+    },
+    "critic": {
+      "rating": 8.7,
+      "numReviews": 34,
+      "meter": 100
+    },
+    "lastUpdated": {
+      "$date": "2015-09-14T19:30:50.000Z"
+    },
+    "rotten": 0,
+    "production": "Universal Pictures",
+    "fresh": 34
+  },
+  "plot_embedding": [
+    -0.022222222222222223,
+    -0.022222222222222223,
+    -0.022222222222222223,
+    -0.022222222222222223,
+    -0.022222222222222223,
+    -0.022222222222222223,
+    -0.022222222222222223,
+    -0.022222222222222223,
+    -0.022222222222222223,
+    -0.022222222222222223
+  ],
+  "plot_embedding_voyage_3_large": [
+    -0.022222222222222223,
+    -0.022222222222222223,
+    -0.022222222222222223,
+    -0.022222222222222223,
+    -0.022222222222222223,
+    -0.022222222222222223,
+    -0.022222222222222223,
+    -0.022222222222222223,
+    -0.022222222222222223,
+    -0.022222222222222223
+  ]
+}
