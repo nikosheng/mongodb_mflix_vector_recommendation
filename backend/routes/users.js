@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const Movie = require('../models/Movie');
+const { generateUserProfile, generateEmbedding } = require('../services/openaiService');
 
 // Login Endpoint (Mock - no password check)
 router.post('/login', async (req, res) => {
@@ -97,6 +98,63 @@ router.get('/:userId/recommendations', async (req, res) => {
 
   } catch (err) {
     console.error("Error in user recommendations:", err);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Record User Activity & Trigger Profiling
+router.post('/history', async (req, res) => {
+  try {
+    const { userId, movieId, browsingTime } = req.body;
+    
+    if (!userId || !movieId) {
+      return res.status(400).json({ message: "userId and movieId are required" });
+    }
+
+    const user = await User.findById(userId);
+    const movie = await Movie.findById(movieId);
+
+    if (!user || !movie) {
+      return res.status(404).json({ message: "User or Movie not found" });
+    }
+
+    // Add to history with expanded attributes
+    user.history.push({
+      movieId: movie._id,
+      browsingTime: browsingTime || 0,
+      timestamp: new Date(),
+      genres: movie.genres || [],
+      actors: movie.cast || [],
+      languages: movie.languages || []
+    });
+
+    // Check if we need to generate/update profile
+    // Trigger every 5 activities
+    if (user.history.length % 5 === 0) {
+      console.log(`Triggering user profile update for ${user.name} (History length: ${user.history.length})`);
+      
+      // Generate Profile Summary using only the latest 10 history items
+      const recentHistory = user.history.slice(-10);
+      const profileSummary = await generateUserProfile(recentHistory);
+      user.user_profile = profileSummary;
+
+      // Generate Profile Embedding
+      if (profileSummary) {
+        const embedding = await generateEmbedding(profileSummary);
+        user.user_profile_embedding = embedding;
+      }
+    }
+
+    await user.save();
+
+    res.json({ 
+      message: "History recorded successfully", 
+      historyLength: user.history.length,
+      profileUpdated: user.history.length % 5 === 0 
+    });
+
+  } catch (err) {
+    console.error("Error recording history:", err);
     res.status(500).json({ message: err.message });
   }
 });

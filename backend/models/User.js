@@ -7,8 +7,13 @@ const UserSchema = new mongoose.Schema({
   history: [{
     movieId: { type: mongoose.Schema.Types.ObjectId, ref: 'Movie' },
     browsingTime: Number, // Duration in seconds
-    timestamp: { type: Date, default: Date.now }
-  }]
+    timestamp: { type: Date, default: Date.now },
+    genres: [String],
+    actors: [String],
+    languages: [String]
+  }],
+  user_profile: String,
+  user_profile_embedding: [Number]
 }, { collection: 'users' });
 
 module.exports = mongoose.model('User', UserSchema);
