@@ -18,7 +18,8 @@ function App() {
   
   // Configuration for Cold Start (Anonymous Users)
   // const coldStartPrompt = "I want to display prioritized movie to be show in the landing page. Besides, the movies are casted by actor Jackie Chan should be prioritized.";
-  const coldStartPrompt = "I want to display prioritized movie to be show in the landing page. I want to display the movies are from Hong Kong.";
+  const coldStartPrompt = "I want to display prioritized movie to be show in the landing page. Besides, the movies are casted by actor Stephen Chow should be prioritized.";
+  // const coldStartPrompt = "I want to display prioritized movie to be show in the landing page. I want to display the movies are from Hong Kong.";
 
   const handleMovieClick = async (movie) => {
     setSelectedMovie(movie);

@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
       .sort({ released: -1 }) // Newest first
       .skip((page - 1) * limit)
       .limit(limit)
-      .select('title poster genres year imdb plot');
+      .select('title poster genres year imdb plot cast directors');
     
     res.json(movies);
   } catch (err) {
@@ -139,7 +139,7 @@ router.post('/cold-start', async (req, res) => {
           },
           {
               $project: {
-                  title: 1, poster: 1, plot: 1, genres: 1, year: 1, imdb: 1, released: 1, promotion: 1,
+                  title: 1, poster: 1, plot: 1, genres: 1, year: 1, imdb: 1, released: 1, promotion: 1, cast: 1, directors: 1,
                   score: { $meta: "vectorSearchScore" }
               }
           }
@@ -167,7 +167,7 @@ router.post('/cold-start', async (req, res) => {
         })
         // .sort({ "imdb.votes": -1, "imdb.rating": -1 }) // Popularity
         .limit(neededOrganic)
-        .select('title poster plot genres year imdb released promotion');
+        .select('title poster plot genres year imdb released promotion cast directors');
     }
 
     // 4. Combine Results
