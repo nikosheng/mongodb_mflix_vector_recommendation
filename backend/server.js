@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const movieRoutes = require('./routes/movies');
 const userRoutes = require('./routes/users');
+const chatbotRoutes = require('./routes/chatbot');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -26,6 +27,7 @@ mongoose.connect(process.env.MONGODB_URI)
 // Routes
 app.use('/api/movies', movieRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/chatbot', chatbotRoutes);
 
 app.get('/', (req, res) => {
   res.send('MFlix Backend API is running');

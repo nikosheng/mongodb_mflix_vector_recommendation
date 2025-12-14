@@ -71,6 +71,14 @@ The frontend will run on `http://localhost:5173`.
 - **Movie Details**: Click on any movie to see details.
 - **Recommendations**: The "More Like This" section in the modal uses **Vector Search** to find movies with similar plots.
 
+### OpenAI Service Integration
+
+The `openaiService.js` file provides functionalities to interact with OpenAI for various tasks:
+
+-   **`generateUserProfile(history)`**: Analyzes user movie viewing history to create a concise user bio summarizing preferences (genres, actors, languages, engagement/duration).
+-   **`generateEmbedding(text)`**: Generates a vector embedding for a given text input, useful for similarity searches.
+-   **`analyzeMoviesChat(query, context)`**: Acts as a data analyst helper, describing patterns in movie data based on a user query and provided context.
+
 ## Demo Login
 
-For demonstration purposes, you can log in with the username `Cersei Lannister` and `Bran Stark` to see personalized recommendations based on browsing history.
+For demonstration purposes, you can log in with the username `Cersei Lannister`, `Khal Drogo`, and `Bran Stark` to see personalized recommendations based on browsing history.

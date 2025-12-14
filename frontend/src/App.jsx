@@ -4,7 +4,8 @@ import Banner from './components/Banner';
 import Row from './components/Row';
 import Modal from './components/Modal';
 import UserRecommendationRow from './components/UserRecommendationRow';
-import { loginUser } from './api';
+import Chatbot from './components/Chatbot';
+import { loginUser, recordUserHistory } from './api';
 import { X } from 'lucide-react';
 
 function App() {
@@ -14,10 +15,21 @@ function App() {
   const [usernameInput, setUsernameInput] = useState('Cersei Lannister');
   const [loginError, setLoginError] = useState(null);
 
-  const handleMovieClick = (movie) => {
+  const handleMovieClick = async (movie) => {
     setSelectedMovie(movie);
     // Disable background scrolling when modal is open
     document.body.style.overflow = 'hidden';
+
+    // Record user history if logged in
+    if (user && user._id) {
+      try {
+        // Assuming a default browsing time for now, actual implementation might track this dynamically
+        await recordUserHistory(user._id, movie._id, 120); 
+        console.log("User history recorded for movie:", movie.title);
+      } catch (error) {
+        console.error("Failed to record user history:", error);
+      }
+    }
   };
 
   const handleCloseModal = () => {
@@ -112,6 +124,7 @@ function App() {
             </div>
         </div>
       )}
+      <Chatbot />
     </div>
   );
 }
