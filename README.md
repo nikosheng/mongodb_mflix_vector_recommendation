@@ -79,6 +79,15 @@ The `openaiService.js` file provides functionalities to interact with OpenAI for
 -   **`generateEmbedding(text)`**: Generates a vector embedding for a given text input, useful for similarity searches.
 -   **`analyzeMoviesChat(query, context)`**: Acts as a data analyst helper, describing patterns in movie data based on a user query and provided context.
 
+### Marketing Agent Service Integration
+
+The `marketingAgentService.js` file provides functionalities to parse natural language marketing prompts using Azure OpenAI's structured output capabilities.
+
+-   **`parseMarketingPrompt(prompt)`**: Analyzes a natural language marketing prompt to extract structured configuration for movie promotions, including:
+    *   `percentage`: The percentage of prioritized (promoted) movies to display.
+    *   `criteria`: Search keywords or criteria for promoted movies.
+    *   `filters`: Optional filters such as `cast`, `country`, and `genre`.
+
 ## Demo Login
 
 For demonstration purposes, you can log in with the username `Cersei Lannister`, `Khal Drogo`, and `Bran Stark` to see personalized recommendations based on browsing history.

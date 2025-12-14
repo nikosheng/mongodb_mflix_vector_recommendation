@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Movie = require('../models/Movie');
+const { parseMarketingPrompt } = require('../services/marketingAgentService');
+const { generateEmbedding } = require('../services/openaiService');
 
 // Get all movies (with pagination and genre filter)
 router.get('/', async (req, res) => {
@@ -61,6 +63,7 @@ router.get('/recommend/:id', async (req, res) => {
       },
       {
         $sort: {
+            score: -1, // Sort by vector search score (highest first)
             released: -1 // Sort by release date (newest first)
         }
       },
@@ -86,6 +89,102 @@ router.get('/recommend/:id', async (req, res) => {
       message: err.message,
       hint: "Ensure the 'mflix_vectorindex' is created in MongoDB Atlas on the 'embedded_movies' collection."
     });
+  }
+});
+
+// Cold Start / Marketing Promotion Endpoint
+router.post('/cold-start', async (req, res) => {
+  try {
+    const { prompt } = req.body;
+    if (!prompt) return res.status(400).json({ message: "Prompt is required" });
+
+    // 1. Parse prompt using LangGraph/LLM Agent
+    const config = await parseMarketingPrompt(prompt);
+    // Expected config: { percentage: number, criteria: string }
+    console.log("Marketing Config:", config);
+    
+    const totalLimit = 20;
+    const promotedCount = Math.round(totalLimit * (config.percentage / 100));
+    const organicCount = totalLimit - promotedCount;
+
+    let promotedMovies = [];
+    let organicMovies = [];
+
+    // 2. Search for Promoted Movies (Vector Search + Filter)
+    if (promotedCount > 0) {
+       const criteriaEmbedding = await generateEmbedding(config.criteria);
+       
+       const promotedPipeline = [
+          {
+              $vectorSearch: {
+                  index: "mflix_vectorindex",
+                  path: "plot_embedding",
+                  queryVector: criteriaEmbedding,
+                  numCandidates: 200, // Over-fetch to ensure we find promoted items
+                  limit: 100,
+                  filter: {
+                      $and: [
+                          config.filters?.cast && config.filters.cast.length > 0 ? { cast: { $in: config.filters.cast } } : {},
+                          config.filters?.country ? { countries: config.filters.country } : {},
+                          config.filters?.genre ? { genres: config.filters.genre } : {}
+                      ].filter(f => Object.keys(f).length > 0)
+                  }
+              }
+          },
+          {
+              $match: { promotion: true }
+          },
+          {
+              $limit: promotedCount
+          },
+          {
+              $project: {
+                  title: 1, poster: 1, plot: 1, genres: 1, year: 1, imdb: 1, released: 1, promotion: 1,
+                  score: { $meta: "vectorSearchScore" }
+              }
+          }
+       ];
+       promotedMovies = await Movie.aggregate(promotedPipeline);
+    }
+
+    // 3. Search for Organic/Filler Movies (Popularity Fallback)
+    if (organicMovies.length < organicCount) {
+        // If we didn't find enough promoted movies, we might want to fill the gap or just stick to the plan.
+        // Here we stick to the plan for organic count, but maybe fill up if promoted is short?
+        // Let's stick to the requested organic count first.
+        const currentCount = promotedMovies.length;
+        // If we wanted 14 promoted but got 5, should we fetch 6 organic or 15 organic?
+        // "Display 70% of prioritized..." implies a ratio.
+        // But usually filling the page is more important.
+        // Let's just fill the rest of the 20 slots with organic if promoted falls short.
+        const neededOrganic = totalLimit - currentCount;
+        
+        const excludedIds = promotedMovies.map(m => m._id);
+        
+        organicMovies = await Movie.find({
+            _id: { $nin: excludedIds },
+            poster: { $exists: true, $ne: null }
+        })
+        // .sort({ "imdb.votes": -1, "imdb.rating": -1 }) // Popularity
+        .limit(neededOrganic)
+        .select('title poster plot genres year imdb released promotion');
+    }
+
+    // 4. Combine Results
+    const results = [...promotedMovies, ...organicMovies];
+    console.log("Movie names:", results.map(m => m.title));
+    
+    res.json({
+        meta: {
+            config,
+            counts: { promoted: promotedMovies.length, organic: organicMovies.length }
+        },
+        movies: results
+    });
+
+  } catch (err) {
+      console.error("Cold start error:", err);
+      res.status(500).json({ message: err.message });
   }
 });
 

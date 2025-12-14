@@ -45,7 +45,8 @@ const MovieSchema = new mongoose.Schema({
     fresh: Number
   },
   plot_embedding: [Number],
-  plot_embedding_voyage_3_large: [Number]
+  plot_embedding_voyage_3_large: [Number],
+  promotion: Boolean
 }, { collection: 'embedded_movies' });
 
 module.exports = mongoose.model('Movie', MovieSchema);

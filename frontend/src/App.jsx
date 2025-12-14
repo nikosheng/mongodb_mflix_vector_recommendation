@@ -4,6 +4,7 @@ import Banner from './components/Banner';
 import Row from './components/Row';
 import Modal from './components/Modal';
 import UserRecommendationRow from './components/UserRecommendationRow';
+import ColdStartRow from './components/ColdStartRow';
 import Chatbot from './components/Chatbot';
 import { loginUser, recordUserHistory } from './api';
 import { X } from 'lucide-react';
@@ -14,6 +15,10 @@ function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [usernameInput, setUsernameInput] = useState('Cersei Lannister');
   const [loginError, setLoginError] = useState(null);
+  
+  // Configuration for Cold Start (Anonymous Users)
+  // const coldStartPrompt = "I want to display prioritized movie to be show in the landing page. Besides, the movies are casted by actor Jackie Chan should be prioritized.";
+  const coldStartPrompt = "I want to display prioritized movie to be show in the landing page. I want to display the movies are from Hong Kong.";
 
   const handleMovieClick = async (movie) => {
     setSelectedMovie(movie);
@@ -63,14 +68,20 @@ function App() {
       <Navbar user={user} onLoginClick={handleLoginClick} onLogout={handleLogout} />
       <Banner onMovieClick={handleMovieClick} />
       
-      <div className="space-y-4 md:space-y-8 -mt-20 md:-mt-32 relative z-20 pl-4 md:pl-0">
+      <div className="space-y-4 md:space-y-8 relative z-20 pl-4 md:pl-0">
         
         {/* User Specific Recommendations */}
-        {user && (
+        {user ? (
             <UserRecommendationRow 
                 userId={user._id} 
                 userName={user.name} 
                 onMovieClick={handleMovieClick} 
+            />
+        ) : (
+             /* Cold Start / Marketing Row for Anonymous Users */
+            <ColdStartRow 
+                prompt={coldStartPrompt}
+                onMovieClick={handleMovieClick}
             />
         )}
 
