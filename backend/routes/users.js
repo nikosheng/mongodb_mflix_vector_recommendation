@@ -128,6 +128,11 @@ router.post('/history', async (req, res) => {
       languages: movie.languages || []
     });
 
+    // Limit history to the last 10 entries
+    if (user.history.length > 10) {
+      user.history = user.history.slice(-10);
+    }
+
     // Check if we need to generate/update profile
     // Trigger every 5 activities
     if (user.history.length % 5 === 0) {

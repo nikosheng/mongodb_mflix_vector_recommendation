@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Banner from './components/Banner';
 import Row from './components/Row';
@@ -16,9 +16,22 @@ function App() {
   const [usernameInput, setUsernameInput] = useState('Cersei Lannister');
   const [loginError, setLoginError] = useState(null);
   
+  // Check for stored user on mount
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error("Failed to parse stored user", e);
+        localStorage.removeItem('user');
+      }
+    }
+  }, []);
+
   // Configuration for Cold Start (Anonymous Users)
-  // const coldStartPrompt = "I want to display prioritized movie to be show in the landing page. Besides, the movies are casted by actor Jackie Chan should be prioritized.";
-  const coldStartPrompt = "I want to display prioritized movie to be show in the landing page. Besides, the movies are casted by actor Stephen Chow should be prioritized.";
+  const coldStartPrompt = "I want to display prioritized movie to be show in the landing page. Besides, the movies are casted by actor Jackie Chan and Anita Mui should be prioritized.";
+  // const coldStartPrompt = "I want to display prioritized movie to be show in the landing page. Besides, the movies are casted by actor Stephen Chow should be prioritized.";
   // const coldStartPrompt = "I want to display prioritized movie to be show in the landing page. I want to display the movies are from Hong Kong.";
 
   const handleMovieClick = async (movie) => {
@@ -30,7 +43,8 @@ function App() {
     if (user && user._id) {
       try {
         // Assuming a default browsing time for now, actual implementation might track this dynamically
-        await recordUserHistory(user._id, movie._id, 120); 
+        const randomBrowsingTime = Math.floor(Math.random() * (300 - 60 + 1)) + 60; // Random time between 60 and 300 seconds
+        await recordUserHistory(user._id, movie._id, randomBrowsingTime); 
         console.log("User history recorded for movie:", movie.title);
       } catch (error) {
         console.error("Failed to record user history:", error);
@@ -49,6 +63,7 @@ function App() {
 
   const handleLogout = () => {
     setUser(null);
+    localStorage.removeItem('user');
   };
 
   const submitLogin = async (e) => {
@@ -57,6 +72,7 @@ function App() {
     try {
         const res = await loginUser(usernameInput);
         setUser(res.data);
+        localStorage.setItem('user', JSON.stringify(res.data));
         setShowLoginModal(false);
     } catch (err) {
         console.error("Login failed:", err);
